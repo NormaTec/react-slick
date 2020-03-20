@@ -25,6 +25,7 @@ import {
 
 import { Track } from "./track";
 import { Dots } from "./dots";
+import { BottomRightArrows } from './bottom-right-arrows';
 import { PrevArrow, NextArrow } from "./arrows";
 import ResizeObserver from "resize-observer-polyfill";
 
@@ -643,6 +644,36 @@ export class InnerSlider extends React.Component {
       };
       dots = <Dots {...dotProps} />;
     }
+
+    //TODO check if bottom right arrows is selected
+    let bottomRightArrows; 
+    if (
+      this.props.dots === true &&
+      this.state.slideCount >= this.props.slidesToShow
+    ) {
+      let dotProps = extractObject(spec, [
+        "dotsClass",
+        "slideCount",
+        "slidesToShow",
+        "currentSlide",
+        "slidesToScroll",
+        "clickHandler",
+        "children",
+        "customPaging",
+        "infinite",
+        "appendDots"
+      ]);
+      const { pauseOnDotsHover } = this.props;
+      dotProps = {
+        ...dotProps,
+        clickHandler: this.changeSlide,
+        onMouseEnter: pauseOnDotsHover ? this.onDotsLeave : null,
+        onMouseOver: pauseOnDotsHover ? this.onDotsOver : null,
+        onMouseLeave: pauseOnDotsHover ? this.onDotsLeave : null
+      };
+      bottomRightArrows = <BottomRightArrows {...dotProps} />;
+    }
+    
 
     var prevArrow, nextArrow;
     let arrowProps = extractObject(spec, [
